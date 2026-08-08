@@ -858,7 +858,11 @@ async function startConvert() {
     startTimer();
     
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+         referrerPolicy: "no-referrer", // 关键：不发送 Referer
+         mode: "cors"
+      });
+
       if (!response.ok) throw new Error('HTTP ' + response.status);
       const content = await response.text();
       segments = parseM3U8(content, url);
@@ -894,7 +898,12 @@ async function startConvert() {
       const segUrl = segments[currentIndex];
       
       try {
-        const response = await fetch(segUrl);
+        const response = await fetch(segUrl, {
+  referrerPolicy: "no-referrer",
+  mode: "cors",
+  credentials: "omit"
+});
+
         if (!response.ok) throw new Error('HTTP ' + response.status);
         const buffer = await response.arrayBuffer();
         const data = new Uint8Array(buffer);
